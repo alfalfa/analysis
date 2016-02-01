@@ -11,7 +11,6 @@ import pprint
 import math
 from decimal import *
 from datetime import datetime
-#getcontext().prec = 6 # the precision of our get time syscall
 
 def get_filenames_list(directory_path):
     filenames_list = []
@@ -20,7 +19,8 @@ def get_filenames_list(directory_path):
             filenames_list.append(os.path.abspath(os.path.join(dirpath, f)))
     return filenames_list
 
-# map takes only one argument so use a five-tuple as input
+# Function to process raw log files for a single experiment run, called in parallel
+# by process pool map function which takes only one argument so we use a five-tuple arg
 def parse_logs_for_trial((trial_id, youtube_log_filename, stall_log_filename, video_stats_lookup_maps, output_directory)):
     output_filename = output_directory + "/" + trial_id + "/" + "frame-stats.dat"
     with open(output_filename, 'w') as output_file, open(youtube_log_filename) as youtube_logfile, open(stall_log_filename) as stall_logfile:
@@ -90,6 +90,7 @@ def main():
     youtube_logs_directory = sys.argv[2]
 
     video_stats_lookup_maps = dict()
+
     for filename in get_filenames_list( SSIM_index_directory):
         resolution = re.search("[0-9]+x([0-9]+)", filename).group(1)
         with open(filename) as SSIM_index_file:
@@ -106,8 +107,6 @@ def main():
                     (byte_offset_to_frame_index, frame_index_to_ssim) = video_stats_lookup_maps[resolution]
                     byte_offset_to_frame_index[byte_offset] = displayed_frame_index
                     frame_index_to_ssim[displayed_frame_index] = SSIM_score
-
-                    #print( displayed_frame_index + " " + SSIM_score  + " " + byte_offset )
 
     output_directory = sys.argv[3]
     if os.path.exists(output_directory):
