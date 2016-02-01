@@ -17,4 +17,4 @@ def write_points_to_file(xvals, yvals, filename):
     print("Writing " + data_directory + filename +"..")
     with open(data_directory + filename, 'w') as outfile:
         for (x, y) in zip(xvals, yvals):
-            outfile.write(str(x) + ", " + str(y))
+            outfile.write(str(x) + "  " + str(y) + "\n")
