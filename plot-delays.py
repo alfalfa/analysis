@@ -89,63 +89,21 @@ def main():
         subtotal_playback_time -= ifd
         yvals.append( subtotal_playback_time / total_playback_time)
 
-    plt.plot( xvals, yvals )
-
-    plt.title("Proportion of total playback time with inter-frame delays less than..\n" + dataset_title +" ("+ str(len(xvals))+" datapoints)")
-    plt.xlabel('Inter-frame delay (seconds)')
-    plt.ylim(0,1)
-    #plt.yscale('log')
-    filename = dataset_title + "-proportional-playback"
+    filename = dataset_title + "-proportional-playback.dat"
     plotting_helper.write_points_to_file(xvals, yvals, filename)
-    filename += ".svg"
-    print("Writing " + filename + "..")
-    plt.savefig(filename)
-    plt.clf()
 
     (xvals, yvals) = plotting_helper.get_cdf( inter_frame_delays_list )
     yvals = 1-yvals # CCDF
-    plt.plot( xvals, yvals )
-
-    plt.title("CCDF of all inter-frame delays\n" + dataset_title +" ("+ str(len(xvals))+" datapoints)")
-    plt.xlabel('Inter-frame delay (seconds)')
-    plt.yscale('log')
-
-    # mark 1/24s on chart
-    #plt.xlim((-1./24.))
-    #locs, labels = plt.xticks()
-    #locs[0] = (1./24.)
-    #plt.xticks(locs)
-
-    #plt.axvline(x=1./24., ls=':', c='black')
-
-    filename = dataset_title + "-inter-frame-delays-ccdf"
+    filename = dataset_title + "-inter-frame-delays-ccdf.dat"
     plotting_helper.write_points_to_file(xvals, yvals, filename)
-    filename += ".svg"
-    print("Writing " + filename +"..")
-    plt.savefig(filename)
-    plt.clf()
 
     (xvals, yvals) = plotting_helper.get_cdf( resume_delays_list )
-    plt.plot( xvals, yvals )
-    plt.title("CDF of seek delays\n" + dataset_title +" ("+ str(len(xvals))+" datapoints)")
-    plt.xlabel('Resume duration (seconds)')
-    filename = dataset_title + "-resume-delays-cdf"
+    filename = dataset_title + "-resume-delays-cdf.dat"
     plotting_helper.write_points_to_file(xvals, yvals, filename)
-    filename += ".svg"
-    print("Writing " + filename +"..")
-    plt.savefig(filename)
-    plt.clf()
 
     (xvals, yvals) = plotting_helper.get_cdf( rebuffering_ratios )
-    plt.plot( xvals, yvals )
-    plt.title("CDF rebuffering ratios\n" + dataset_title +" ("+ str(len(xvals))+" runs)")
-    plt.xlabel('Rebuffering ratio')
-    filename = dataset_title + "-rebuffering-ratios-cdf"
+    filename = dataset_title + "-rebuffering-ratios-cdf.dat"
     plotting_helper.write_points_to_file(xvals, yvals, filename)
-    filename += ".svg"
-    print("Writing " + filename +"..")
-    plt.savefig(filename)
-    plt.clf()
 
 if __name__ == '__main__':
   main()

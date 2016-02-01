@@ -53,39 +53,17 @@ def main():
         raise Exception("Couldn't parse any ssim values from " + frame_stats_directory)
 
 
+    filename = dataset_title + "-ssim-cdf.dat"
     (xvals, yvals) = plotting_helper.get_cdf( all_ssim_scores )
-    plt.plot( xvals, yvals )
-    plt.title("CDF of frame SSIM scores\n" + dataset_title +" ("+ str(len(xvals))+" datapoints)")
-    plt.xlabel('SSIM score')
-    filename = dataset_title + "-ssim-cdf"
     plotting_helper.write_points_to_file(xvals, yvals, filename)
-    filename += ".svg"
-    print("Writing " + filename +"..")
-    plt.savefig(filename)
-    plt.clf()
 
     (xvals, yvals) = plotting_helper.get_cdf( get_inverse_complement( all_ssim_scores) )
-    plt.plot( xvals, yvals )
-    plt.title("CDF of 1 / ( 1 - SSIM ) values \n" + dataset_title +" ("+ str(len(xvals))+" datapoints)")
-    plt.xlabel('1/(1 - SSIM score)')
-    plt.xlim(1, 100)
-    filename = dataset_title + "-inverse-complement-ssim-cdf"
+    filename = dataset_title + "-inverse-complement-ssim-cdf.dat"
     plotting_helper.write_points_to_file(xvals, yvals, filename)
-    filename += ".svg"
-    print("Writing " + filename +"..")
-    plt.savefig(filename)
-    plt.clf()
 
     (xvals, yvals) = plotting_helper.get_cdf( per_trial_min_ssim_scores )
-    plt.plot( xvals, yvals )
-    plt.title("CDF of minimum SSIM scores in a run\n" + dataset_title +" ("+ str(len(xvals))+" datapoints)")
-    plt.xlabel('Minimum SSIM score')
-    filename = dataset_title + "-min-ssim-cdf"
+    filename = dataset_title + "-min-ssim-cdf.dat"
     plotting_helper.write_points_to_file(xvals, yvals, filename)
-    filename += ".svg"
-    print("Writing " + filename +"..")
-    plt.savefig(filename)
-    plt.clf()
 
 
 if __name__ == '__main__':

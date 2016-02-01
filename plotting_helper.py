@@ -15,7 +15,7 @@ def write_points_to_file(xvals, yvals, filename):
     if not os.path.isdir(data_directory):
         os.mkdir(data_directory)
 
-    print("Writing " + filename +".txt..")
-    with open(filename + ".txt", 'w') as dataset:
-        for pair in zip(xvals, yvals):
-            print(pair, file=dataset)
+    print("Writing " + data_directory + filename +"..")
+    with open(data_directory + filename, 'w') as outfile:
+        for (x, y) in zip(xvals, yvals):
+            print(str(x) + ", " + str(y), file=outfile)
