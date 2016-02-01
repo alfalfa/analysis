@@ -83,8 +83,8 @@ def main():
     SSIM_index_directory = sys.argv[1]
     youtube_logs_directory = sys.argv[2]
 
+    # First parse data from ssim indices into map used by playback log parser
     video_stats_lookup_maps = dict()
-
     for filename, resolution in directory_traversal_helper.get_filenames_matching_regex(SSIM_index_directory, "[0-9]+x([0-9]+)"):
         with open(filename) as SSIM_index_file:
             for line in SSIM_index_file:
