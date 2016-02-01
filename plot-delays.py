@@ -1,17 +1,7 @@
-from __future__ import print_function
 import os
 import sys
 import re
-import pprint
-import math
-from decimal import *
-import matplotlib
-matplotlib.use('pdf') # Must be before importing matplotlib.pyplot or pylab! Default uses x window manager and won't work cleanly in cloud installations.
-from matplotlib import collections
 import numpy as np
-import pylab
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 import directory_traversal_helper
 import plotting_helper
  

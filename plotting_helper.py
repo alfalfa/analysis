@@ -1,4 +1,3 @@
-from __future__ import print_function
 import os
 import numpy as np
 
@@ -18,4 +17,4 @@ def write_points_to_file(xvals, yvals, filename):
     print("Writing " + data_directory + filename +"..")
     with open(data_directory + filename, 'w') as outfile:
         for (x, y) in zip(xvals, yvals):
-            print(str(x) + ", " + str(y), file=outfile)
+            outfile.write(str(x) + ", " + str(y))
