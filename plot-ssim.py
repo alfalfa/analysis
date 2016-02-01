@@ -44,7 +44,7 @@ def main():
     per_trial_min_ssim_scores = []
     all_ssim_scores = []
 
-    for f, _ in directory_traversal_helper.get_files_matching_regex(frame_stats_directory, "[/]frame-stats.dat"):
+    for f, _ in directory_traversal_helper.get_files_matching_regex(frame_stats_directory, "frame-stats.dat"):
         print("parsing " + f)
         with open(f) as frame_stats_file:
             trial_ssim_scores = []
