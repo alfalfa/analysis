@@ -41,14 +41,13 @@ def main():
     frame_stats_directory = sys.argv[1]
     _, dataset_title  = os.path.split(os.path.abspath(frame_stats_directory))
 
-    trial_to_ssim_stats = dict()
+    per_trial_min_ssim_scores = []
     all_ssim_scores = []
 
-    for f, trial_id in directory_traversal_helper.get_files_matching_regex(frame_stats_directory, "[/]([a-zA-Z0-9_-]+)[/]frame-stats.dat"):
+    for f, _ in directory_traversal_helper.get_files_matching_regex(frame_stats_directory, "[/]frame-stats.dat"):
         print("parsing " + f)
         with open(f) as frame_stats_file:
-            assert( trial_id not in trial_to_ssim_stats ) #duplicate trial id
-            ssim_scores = []
+            trial_ssim_scores = []
             for line in frame_stats_file:
                 if re.search("first chunk request logged on server at ", line):
                     continue #ignore first line
@@ -56,11 +55,10 @@ def main():
                 if string_match is None:
                     print("Failed to parse ssim from line: " + line)
                 ssim_of_frame = float(string_match.group(1))
-                ssim_scores.append(ssim_of_frame)
+                trial_ssim_scores.append(ssim_of_frame)
 
-            ssim_stats = (np.mean(ssim_scores), np.std(ssim_scores), min(ssim_scores))
-            trial_to_ssim_stats[trial_id] = ssim_stats
-            all_ssim_scores += ssim_scores
+            per_trial_min_ssim_scores.append(min(trial_ssim_scores))
+            all_ssim_scores += trial_ssim_scores
     if not all_ssim_scores:
         raise Exception("Couldn't parse any ssim values from " + frame_stats_directory)
 
@@ -90,7 +88,7 @@ def main():
     plt.savefig(filename)
     plt.clf()
 
-    (xvals, yvals) = get_cdf( [ tup[2] for tup in trial_to_ssim_stats.values() ] )
+    (xvals, yvals) = get_cdf( per_trial_min_ssim_scores )
     plt.plot( xvals, yvals )
     plt.title("CDF of minimum SSIM scores in a run\n" + dataset_title +" ("+ str(len(xvals))+" datapoints)")
     plt.xlabel('Minimum SSIM score')
@@ -101,28 +99,28 @@ def main():
     plt.savefig(filename)
     plt.clf()
 
-    analysis_directory = 'analysis/'
-    SSIM_mean_stddev_output_filename = dataset_title + "-mean_stddev_SSIM.txt"
-    SSIM_mean_stddev_output_file = open(analysis_directory + SSIM_mean_stddev_output_filename, 'w')
+    #analysis_directory = 'analysis/'
+    #SSIM_mean_stddev_output_filename = dataset_title + "-mean_stddev_SSIM.txt"
+    #SSIM_mean_stddev_output_file = open(analysis_directory + SSIM_mean_stddev_output_filename, 'w')
 
-    mean_ssims = [ tup[0] for tup in trial_to_ssim_stats.values() ]
-    mean_of_mean_SSIM = np.mean(mean_ssims)
-    stddev_across_mean_SSIM = np.std(mean_ssims)
+    #mean_ssims = [ tup[0] for tup in trial_to_ssim_stats.values() ]
+    #mean_of_mean_SSIM = np.mean(mean_ssims)
+    #stddev_across_mean_SSIM = np.std(mean_ssims)
 
-    print("Mean of SSIM Means: " + str(mean_of_mean_SSIM), file=SSIM_mean_stddev_output_file)
-    print("Standard Deviation Across SSIM Means: " + str(stddev_across_mean_SSIM), file=SSIM_mean_stddev_output_file)
+    #print("Mean of SSIM Means: " + str(mean_of_mean_SSIM), file=SSIM_mean_stddev_output_file)
+    #print("Standard Deviation Across SSIM Means: " + str(stddev_across_mean_SSIM), file=SSIM_mean_stddev_output_file)
 
-    min_ssims = [ tup[2] for tup in trial_to_ssim_stats.values() ]
-    mean_of_min_SSIM = np.mean(min_ssims)
-    stddev_across_min_SSIM = np.std(min_ssims)
-    print("Mean Across Minimum SSIMs: " + str(mean_of_min_SSIM), file=SSIM_mean_stddev_output_file)
-    print("Standard Deviation Across Minimum SSIMs: " + str(stddev_across_min_SSIM), file=SSIM_mean_stddev_output_file)
-    for trial_id in trial_to_ssim_stats:
-        print("Trial " + trial_id + ":", file=SSIM_mean_stddev_output_file)
-        (mean_SSIM, stddev_SSIM, min_SSIM) = trial_to_ssim_stats[trial_id]
-        print("\tMean SSIM: " + str(mean_SSIM), file=SSIM_mean_stddev_output_file)
-        print("\tStdDev SSIM: " + str(stddev_SSIM), file=SSIM_mean_stddev_output_file)
-        print("\tMinimum SSIM: " + str(min_SSIM), file=SSIM_mean_stddev_output_file)
+    #min_ssims = [ tup[2] for tup in trial_to_ssim_stats.values() ]
+    #mean_of_min_SSIM = np.mean(min_ssims)
+    #stddev_across_min_SSIM = np.std(min_ssims)
+    #print("Mean Across Minimum SSIMs: " + str(mean_of_min_SSIM), file=SSIM_mean_stddev_output_file)
+    #print("Standard Deviation Across Minimum SSIMs: " + str(stddev_across_min_SSIM), file=SSIM_mean_stddev_output_file)
+    #for trial_id in trial_to_ssim_stats:
+    #    print("Trial " + trial_id + ":", file=SSIM_mean_stddev_output_file)
+    #    (mean_SSIM, stddev_SSIM, min_SSIM) = trial_to_ssim_stats[trial_id]
+    #    print("\tMean SSIM: " + str(mean_SSIM), file=SSIM_mean_stddev_output_file)
+    #    print("\tStdDev SSIM: " + str(stddev_SSIM), file=SSIM_mean_stddev_output_file)
+    #    print("\tMinimum SSIM: " + str(min_SSIM), file=SSIM_mean_stddev_output_file)
 
 
 
