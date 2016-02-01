@@ -13,17 +13,8 @@ import pylab
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import directory_traversal_helper
+import plotting_helper
  
-def get_cdf( unsorted_vals ):
-    xvals = np.sort( unsorted_vals )
-    yvals = (np.arange(len(xvals)) + 1)/float(len(xvals)) # range from 1 / len(xvals) to 1 inclusive
-    return (xvals, yvals)
-
-def write_points_to_file(xvals, yvals, filename):
-    print("Writing " + filename +".txt..")
-    with open(filename + ".txt", 'w') as dataset:
-        for pair in zip(xvals, yvals):
-            print(pair, file=dataset)
 
 def main():
     if len( sys.argv ) is not 2:
@@ -89,7 +80,6 @@ def main():
         raise ValueError("Found no frame-stats.dat files to parse")
     else:
         print("Finished parsing " + str(num_files_parsed) + " files")
-    chart_directory = 'charts/'
 
     total_playback_time = sum( inter_frame_delays_list )
     xvals = np.sort( inter_frame_delays_list )
@@ -105,14 +95,14 @@ def main():
     plt.xlabel('Inter-frame delay (seconds)')
     plt.ylim(0,1)
     #plt.yscale('log')
-    filename = chart_directory + dataset_title + "-proportional-playback"
-    write_points_to_file(xvals, yvals, filename)
+    filename = dataset_title + "-proportional-playback"
+    plotting_helper.write_points_to_file(xvals, yvals, filename)
     filename += ".svg"
     print("Writing " + filename + "..")
     plt.savefig(filename)
     plt.clf()
 
-    (xvals, yvals) = get_cdf( inter_frame_delays_list )
+    (xvals, yvals) = plotting_helper.get_cdf( inter_frame_delays_list )
     yvals = 1-yvals # CCDF
     plt.plot( xvals, yvals )
 
@@ -128,30 +118,30 @@ def main():
 
     #plt.axvline(x=1./24., ls=':', c='black')
 
-    filename = chart_directory + dataset_title + "-inter-frame-delays-ccdf"
-    write_points_to_file(xvals, yvals, filename)
+    filename = dataset_title + "-inter-frame-delays-ccdf"
+    plotting_helper.write_points_to_file(xvals, yvals, filename)
     filename += ".svg"
     print("Writing " + filename +"..")
     plt.savefig(filename)
     plt.clf()
 
-    (xvals, yvals) = get_cdf( resume_delays_list )
+    (xvals, yvals) = plotting_helper.get_cdf( resume_delays_list )
     plt.plot( xvals, yvals )
     plt.title("CDF of seek delays\n" + dataset_title +" ("+ str(len(xvals))+" datapoints)")
     plt.xlabel('Resume duration (seconds)')
-    filename = chart_directory + dataset_title + "-resume-delays-cdf"
-    write_points_to_file(xvals, yvals, filename)
+    filename = dataset_title + "-resume-delays-cdf"
+    plotting_helper.write_points_to_file(xvals, yvals, filename)
     filename += ".svg"
     print("Writing " + filename +"..")
     plt.savefig(filename)
     plt.clf()
 
-    (xvals, yvals) = get_cdf( rebuffering_ratios )
+    (xvals, yvals) = plotting_helper.get_cdf( rebuffering_ratios )
     plt.plot( xvals, yvals )
     plt.title("CDF rebuffering ratios\n" + dataset_title +" ("+ str(len(xvals))+" runs)")
     plt.xlabel('Rebuffering ratio')
-    filename = chart_directory + dataset_title + "-rebuffering-ratios-cdf"
-    write_points_to_file(xvals, yvals, filename)
+    filename = dataset_title + "-rebuffering-ratios-cdf"
+    plotting_helper.write_points_to_file(xvals, yvals, filename)
     filename += ".svg"
     print("Writing " + filename +"..")
     plt.savefig(filename)
