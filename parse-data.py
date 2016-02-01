@@ -85,7 +85,7 @@ def main():
 
     # First parse data from ssim indices into map used by playback log parser
     video_stats_lookup_maps = dict()
-    for filename, resolution in directory_traversal_helper.get_filenames_matching_regex(SSIM_index_directory, "[0-9]+x([0-9]+)"):
+    for filename, resolution in directory_traversal_helper.get_files_matching_regex(SSIM_index_directory, "[0-9]+x([0-9]+)"):
         with open(filename) as SSIM_index_file:
             for line in SSIM_index_file:
                 match_object = re.search("([0-9]+) ([0-9]+.[0-9]+) [A-Z] [0-9]+ ([0-9]+)", line)
@@ -110,11 +110,11 @@ def main():
     trial_id_to_youtube_logs = dict()
     trial_id_to_stall_logs = dict()
 
-    for f, trial_id in directory_traversal_helper.get_filenames_matching_regex(youtube_logs_directory, "stall-log-(.+).txt"):
+    for f, trial_id in directory_traversal_helper.get_files_matching_regex(youtube_logs_directory, "[/]stall-log-(.+).txt"):
         assert(trial_id not in trial_id_to_stall_logs)
         trial_id_to_stall_logs[trial_id] = f
 
-    for f, trial_id in directory_traversal_helper.get_filenames_matching_regex(youtube_logs_directory, "^log-(.+).txt"):
+    for f, trial_id in directory_traversal_helper.get_files_matching_regex(youtube_logs_directory, "[/]log-(.+).txt"):
         assert(trial_id not in trial_id_to_youtube_logs)
         trial_id_to_youtube_logs[trial_id] = f
 

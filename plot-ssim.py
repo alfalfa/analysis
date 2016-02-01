@@ -12,13 +12,7 @@ import numpy as np
 import pylab
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-
-def get_filenames_list(directory_path):
-    filenames_list = []
-    for dirpath,_,filenames in os.walk(directory_path):
-        for f in filenames:
-            filenames_list.append(os.path.abspath(os.path.join(dirpath, f)))
-    return filenames_list
+import directory_traversal_helper
 
 def get_inverse_complement( vals ):
     ret = []
@@ -49,27 +43,27 @@ def main():
 
     trial_to_ssim_stats = dict()
     all_ssim_scores = []
-    for f in get_filenames_list(frame_stats_directory):
-        match_object = re.search("[/]([a-zA-Z0-9_-]+)[/]frame-stats.dat", f)
 
-        if match_object: # maybe change this to simpler match
-            trial_id = match_object.group(1)
-            print("parsing " + f)
-            with open(f) as frame_stats_file:
-                assert( trial_id not in trial_to_ssim_stats ) #duplicate trial id
-                ssim_scores = []
-                for line in frame_stats_file:
-                    if re.search("first chunk request logged on server at ", line):
-                        continue #ignore first line
-                    string_match = re.search("ssim score ([0-9\.]+)", line)
-                    if string_match is None:
-                        print("Failed to parse ssim from line: " + line)
-                    ssim_of_frame = float(string_match.group(1))
-                    ssim_scores.append(ssim_of_frame)
+    for f, trial_id in directory_traversal_helper.get_files_matching_regex(frame_stats_directory, "[/]([a-zA-Z0-9_-]+)[/]frame-stats.dat"):
+        print("parsing " + f)
+        with open(f) as frame_stats_file:
+            assert( trial_id not in trial_to_ssim_stats ) #duplicate trial id
+            ssim_scores = []
+            for line in frame_stats_file:
+                if re.search("first chunk request logged on server at ", line):
+                    continue #ignore first line
+                string_match = re.search("ssim score ([0-9\.]+)", line)
+                if string_match is None:
+                    print("Failed to parse ssim from line: " + line)
+                ssim_of_frame = float(string_match.group(1))
+                ssim_scores.append(ssim_of_frame)
 
-                ssim_stats = (np.mean(ssim_scores), np.std(ssim_scores), min(ssim_scores))
-                trial_to_ssim_stats[trial_id] = ssim_stats
-                all_ssim_scores += ssim_scores
+            ssim_stats = (np.mean(ssim_scores), np.std(ssim_scores), min(ssim_scores))
+            trial_to_ssim_stats[trial_id] = ssim_stats
+            all_ssim_scores += ssim_scores
+    if not all_ssim_scores:
+        raise Exception("Couldn't parse any ssim values from " + frame_stats_directory)
+
 
     chart_directory = 'charts/'
 

@@ -12,14 +12,8 @@ import numpy as np
 import pylab
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+import directory_traversal_helper
  
-def get_filenames_list(directory_path):
-    filenames_list = []
-    for dirpath,_,filenames in os.walk(directory_path):
-        for f in filenames:
-            filenames_list.append(os.path.abspath(os.path.join(dirpath, f)))
-    return filenames_list
-
 def get_cdf( unsorted_vals ):
     xvals = np.sort( unsorted_vals )
     yvals = (np.arange(len(xvals)) + 1)/float(len(xvals)) # range from 1 / len(xvals) to 1 inclusive
@@ -41,57 +35,55 @@ def main():
     resume_delays_list = []
     rebuffering_ratios = []
     num_files_parsed = 0
-    for f in get_filenames_list(frame_stats_directory):
-        match_object = re.search("frame-stats.dat", f)
-        if match_object: # maybe change this to simpler match
-            print("parsing " + f)
-            num_files_parsed += 1
-            with open(f) as frame_stats_file:
-                total_playback_time = 0
-                rebuffering_time = 0
-                first_line = True
-                for line in frame_stats_file:
-                    if first_line:
-                        string_match = re.search("first chunk request logged on server at ([0-9]+\.[0-9]+)", line)
-                        if string_match is None:
-                            print("Failed to parse chunk request time from first line: " + line)
-                        previous_system_time = float(string_match.group(1))
-                        previous_frame_shown = -100
-                        first_line = False
-                        continue
-
-                    string_match = re.search("displayed at system time ([0-9\.]+) ", line)
+    for f, _ in directory_traversal_helper.get_files_matching_regex(frame_stats_directory, "frame-stats.dat"):
+        print("parsing " + f)
+        num_files_parsed += 1
+        with open(f) as frame_stats_file:
+            total_playback_time = 0
+            rebuffering_time = 0
+            first_line = True
+            for line in frame_stats_file:
+                if first_line:
+                    string_match = re.search("first chunk request logged on server at ([0-9]+\.[0-9]+)", line)
                     if string_match is None:
-                        print("Failed to parse system time from: " + line)
-                    system_time = float(string_match.group(1))
+                        print("Failed to parse chunk request time from first line: " + line)
+                    previous_system_time = float(string_match.group(1))
+                    previous_frame_shown = -100
+                    first_line = False
+                    continue
 
-                    string_match = re.search("which is frame ([0-9]+)", line)
+                string_match = re.search("displayed at system time ([0-9\.]+) ", line)
+                if string_match is None:
+                    print("Failed to parse system time from: " + line)
+                system_time = float(string_match.group(1))
 
-                    if string_match is None:
-                        print("Failed to parse frame number from: " + line)
-                    frame_shown = int(string_match.group(1))
+                string_match = re.search("which is frame ([0-9]+)", line)
 
-                    time_since_last_frame = system_time - previous_system_time
-                    assert(time_since_last_frame > -1)
+                if string_match is None:
+                    print("Failed to parse frame number from: " + line)
+                frame_shown = int(string_match.group(1))
 
-                    # make sure time is non-decreasing (this shows up a couple times probably because of NTP,
-                    # also for first frame display time with margin of error from first chunk request)
-                    if time_since_last_frame < 0:
-                        time_since_last_frame = 0
+                time_since_last_frame = system_time - previous_system_time
+                assert(time_since_last_frame > -1)
 
-                    if (frame_shown - previous_frame_shown) > 24: # consider a seek if move forward >1s in video, this also includes first frame played
-                        resume_delays_list.append(time_since_last_frame)
-                    else:
-                        inter_frame_delays_list.append(time_since_last_frame)
-                        total_playback_time += time_since_last_frame
-                        if time_since_last_frame > .1:
-                            rebuffering_time += time_since_last_frame
+                # make sure time is non-decreasing (this shows up a couple times probably because of NTP,
+                # also for first frame display time with margin of error from first chunk request)
+                if time_since_last_frame < 0:
+                    time_since_last_frame = 0
+
+                if (frame_shown - previous_frame_shown) > 24: # consider a seek if move forward >1s in video, this also includes first frame played
+                    resume_delays_list.append(time_since_last_frame)
+                else:
+                    inter_frame_delays_list.append(time_since_last_frame)
+                    total_playback_time += time_since_last_frame
+                    if time_since_last_frame > .1:
+                        rebuffering_time += time_since_last_frame
 
 
-                    previous_system_time = system_time
-                    previous_frame_shown = frame_shown
+                previous_system_time = system_time
+                previous_frame_shown = frame_shown
 
-                rebuffering_ratios.append(rebuffering_time / total_playback_time)
+            rebuffering_ratios.append(rebuffering_time / total_playback_time)
 
     if num_files_parsed is 0:
         raise ValueError("Found no frame-stats.dat files to parse")
