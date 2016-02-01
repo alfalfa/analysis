@@ -11,13 +11,7 @@ import pprint
 import math
 from decimal import *
 from datetime import datetime
-
-def get_filenames_list(directory_path):
-    filenames_list = []
-    for dirpath,_,filenames in os.walk(directory_path):
-        for f in filenames:
-            filenames_list.append(os.path.abspath(os.path.join(dirpath, f)))
-    return filenames_list
+import directory_traversal_helper
 
 # Function to process raw log files for a single experiment run, called in parallel
 # by process pool map function which takes only one argument so we use a five-tuple arg
@@ -91,8 +85,7 @@ def main():
 
     video_stats_lookup_maps = dict()
 
-    for filename in get_filenames_list( SSIM_index_directory):
-        resolution = re.search("[0-9]+x([0-9]+)", filename).group(1)
+    for filename, resolution in directory_traversal_helper.get_filenames_matching_regex(SSIM_index_directory, "[0-9]+x([0-9]+)"):
         with open(filename) as SSIM_index_file:
             for line in SSIM_index_file:
                 match_object = re.search("([0-9]+) ([0-9]+.[0-9]+) [A-Z] [0-9]+ ([0-9]+)", line)
@@ -116,27 +109,22 @@ def main():
 
     trial_id_to_youtube_logs = dict()
     trial_id_to_stall_logs = dict()
-    for f in get_filenames_list( youtube_logs_directory ):
-        match_object = re.search("stall-log-(.+).txt", f)
-        if match_object:
-            trial_id = match_object.group(1)
-            assert(trial_id not in trial_id_to_stall_logs)
-            trial_id_to_stall_logs[trial_id] = f
 
-        else:
-            match_object = re.search("log-(.+).txt", f)
-            if match_object:
-                trial_id = match_object.group(1)
-                assert(trial_id not in trial_id_to_youtube_logs)
-                trial_id_to_youtube_logs[trial_id] = f
+    for f, trial_id in directory_traversal_helper.get_filenames_matching_regex(youtube_logs_directory, "stall-log-(.+).txt"):
+        assert(trial_id not in trial_id_to_stall_logs)
+        trial_id_to_stall_logs[trial_id] = f
 
+    for f, trial_id in directory_traversal_helper.get_filenames_matching_regex(youtube_logs_directory, "^log-(.+).txt"):
+        assert(trial_id not in trial_id_to_youtube_logs)
+        trial_id_to_youtube_logs[trial_id] = f
 
-    # check for missing log files
+    # check for missing log files, every stall log should have corresponding youtube log and vice versa
     missing_logs = False
     for trial_id in trial_id_to_stall_logs.keys():
         if trial_id not in trial_id_to_youtube_logs:
             print("Missing youtube log for " + trial_id)
             missing_logs = True
+
     for trial_id in trial_id_to_youtube_logs.keys():
         if trial_id not in trial_id_to_stall_logs:
             print("Missing stall log for " + trial_id)
