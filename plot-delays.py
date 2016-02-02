@@ -80,20 +80,20 @@ def main():
         yvals.append( subtotal_playback_time / total_playback_time)
 
     filename = dataset_title + "-proportional-playback.dat"
-    plotting_helper.write_points_to_file(xvals, yvals, filename)
+    plotting_helper.write_points_to_file(xvals, yvals, dataset_title, filename)
 
     (xvals, yvals) = plotting_helper.get_cdf( inter_frame_delays_list )
     yvals = 1-yvals # CCDF
     filename = dataset_title + "-inter-frame-delays-ccdf.dat"
-    plotting_helper.write_points_to_file(xvals, yvals, filename)
+    plotting_helper.write_points_to_file(xvals, yvals, dataset_title, filename)
 
     (xvals, yvals) = plotting_helper.get_cdf( resume_delays_list )
     filename = dataset_title + "-resume-delays-cdf.dat"
-    plotting_helper.write_points_to_file(xvals, yvals, filename)
+    plotting_helper.write_points_to_file(xvals, yvals, dataset_title, filename)
 
     (xvals, yvals) = plotting_helper.get_cdf( rebuffering_ratios )
     filename = dataset_title + "-rebuffering-ratios-cdf.dat"
-    plotting_helper.write_points_to_file(xvals, yvals, filename)
+    plotting_helper.write_points_to_file(xvals, yvals, dataset_title, filename)
 
 if __name__ == '__main__':
   main()

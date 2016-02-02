@@ -44,15 +44,15 @@ def main():
 
     filename = dataset_title + "-ssim-cdf.dat"
     (xvals, yvals) = plotting_helper.get_cdf( all_ssim_scores )
-    plotting_helper.write_points_to_file(xvals, yvals, filename)
+    plotting_helper.write_points_to_file(xvals, yvals, dataset_title, filename)
 
     (xvals, yvals) = plotting_helper.get_cdf( get_inverse_complement( all_ssim_scores) )
     filename = dataset_title + "-inverse-complement-ssim-cdf.dat"
-    plotting_helper.write_points_to_file(xvals, yvals, filename)
+    plotting_helper.write_points_to_file(xvals, yvals, dataset_title, filename)
 
     (xvals, yvals) = plotting_helper.get_cdf( per_trial_min_ssim_scores )
     filename = dataset_title + "-min-ssim-cdf.dat"
-    plotting_helper.write_points_to_file(xvals, yvals, filename)
+    plotting_helper.write_points_to_file(xvals, yvals, dataset_title, filename)
 
 
 if __name__ == '__main__':
