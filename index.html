@@ -1,0 +1,46 @@
+<html>
+<link rel="stylesheet" type="text/css" href="stylesheets/two_image_block.css">
+
+<body>
+<h1>YouTube results (1080p LTE, 1080p EVDO, 720p LTE, 720p EVDO)</h1><p>
+
+<!-- <a href="https://github.com/alfalfa/youtube-analysis/raw/gh-pages/playback-logs.tar.xz">Download datasets</a> -->
+<ol>
+
+<li>For each raster shown to the user, take the SSIM (relative to the "original" raster). Report the mean and stddev of these SSIMs.
+
+<li>For each run of the video, take the minimum SSIM among the rasters shown to the user. (One "minimum SSIM" per run.) Report the mean and stddev of these minima.
+
+<ol>
+<a href="charts/ssim-cdf.html">CDFs of all SSIM scores</a><p>
+<a href="charts/min-ssim-cdf.html">CDFs of min SSIM scores</a><p>
+<a href="charts/inverse-complement-ssim-cdf.html">CDFs of 1 / (1- SSIM) values</a><p>
+</ol>
+
+<li>For the stalls, separate out the stalls that occur immediately after a seek event -- call these "resumes" -- and all the other stalls that occur while the video is supposed to be playing -- call these "inter-frame delays."
+
+<ol>
+
+<li> Among the "resumes," aggregate all the delays together and plot the CDF.<p>
+<a href="charts/resume-delays-cdf.html">Current charts</a>
+<p>
+
+<li>Plot the CDF of all of the "inter-frame delays." It's okay if most of them are exactly 1/24 second -- hopefully that will be true. But the part of the graph that is &gt; 1/24 second will be the stally part.<p>
+<a href="charts/inter-frame-delays-ccdf.html">Current charts</a>
+<p>
+
+<li>For each run, take the total duration of all of the "inter-frame delays." (Call this "total playback time.") Then take the total duration of the inter-frame delays that are greater than 1/10 second. Call this "rebuffering time." Report the ratio of the "rebuffering time" to the "total playback time." Call this the "rebuffering ratio." (I.e. how much of the time was the user staring at a stalled screen, not counting the resumes after a seek.)<p>
+<a href="charts/rebuffering-ratios-cdf.html">Current charts</a>
+<p>
+
+<li>Chart CDF of proportion of playback time of inter frame delays<p>
+<a href="charts/proportional-playback.html">Current charts</a>
+
+</ol>
+
+</ol>
+
+
+</body>
+
+</html>
