@@ -10,4 +10,5 @@ do
     gnuplot -e "dataset='$dataset'" gnuplot_scripts/rebuffering-ratios-cdf.plt
     gnuplot -e "dataset='$dataset'" gnuplot_scripts/resume-delays-cdf.plt
     gnuplot -e "dataset='$dataset'" gnuplot_scripts/ssim-cdf.plt
+    echo "Finished plotting $dataset
 done
