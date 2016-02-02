@@ -110,11 +110,11 @@ def main():
     trial_id_to_youtube_logs = dict()
     trial_id_to_stall_logs = dict()
 
-    for f, trial_id in directory_traversal_helper.get_files_matching_regex(youtube_logs_directory, "[/]stall-log-(.+).txt"):
+    for f, trial_id in directory_traversal_helper.get_files_matching_regex(youtube_logs_directory, "stall-log-(.+).txt"):
         assert(trial_id not in trial_id_to_stall_logs)
         trial_id_to_stall_logs[trial_id] = f
 
-    for f, trial_id in directory_traversal_helper.get_files_matching_regex(youtube_logs_directory, "[/]log-(.+).txt"):
+    for f, trial_id in directory_traversal_helper.get_files_matching_regex(youtube_logs_directory, "^log-(.+).txt"):
         assert(trial_id not in trial_id_to_youtube_logs)
         trial_id_to_youtube_logs[trial_id] = f
 
