@@ -11,5 +11,5 @@ do
     gnuplot -e "dataset='$dataset'" gnuplot_scripts/ssim-cdf.plt &
     gnuplot -e "dataset='$dataset'" gnuplot_scripts/min-ssim-cdf.plt &
     wait
-    echo Finished plotting $dataset
+    echo Finished graphs for $dataset
 done
