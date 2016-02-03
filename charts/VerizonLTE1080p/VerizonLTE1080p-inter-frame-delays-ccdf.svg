@@ -101,7 +101,7 @@
 		<text>CCDF of all inter-frame delays</text>
 	</g>
 	<g transform="translate(326.9,31.6)" style="stroke:none; fill:black; font-family:arial; font-size:12.00pt; text-anchor:middle">
-		<text>CCDF of all inter-frame delays</text>
+		<text>CCDF of all inter-frame delays for VerizonLTE1080p</text>
 	</g>
 </g>
 	<g id="gnuplot_plot_1" ><title>gnuplot_plot_1</title>

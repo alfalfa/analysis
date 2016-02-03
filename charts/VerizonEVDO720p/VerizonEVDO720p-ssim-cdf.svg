@@ -99,7 +99,7 @@
 		<text>SSIM score</text>
 	</g>
 	<g transform="translate(314.4,31.6)" style="stroke:none; fill:black; font-family:arial; font-size:12.00pt; text-anchor:middle">
-		<text>CDF of frame SSIM scores</text>
+		<text>CDF of frame SSIM scores for VerizonEVDO720p</text>
 	</g>
 </g>
 	<g id="gnuplot_plot_1" ><title>gnuplot_plot_1</title>

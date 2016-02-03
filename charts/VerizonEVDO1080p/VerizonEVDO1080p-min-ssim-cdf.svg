@@ -93,7 +93,7 @@
 		<text> 0.298</text>
 	</g>
 	<path stroke='black'  d='M53.9,54.1 L53.9,364.0 L575.0,364.0 L575.0,54.1 L53.9,54.1 Z  '/>	<g transform="translate(314.4,31.6)" style="stroke:none; fill:black; font-family:arial; font-size:12.00pt; text-anchor:middle">
-		<text>CDF of minimum SSIM scores in a run</text>
+		<text>CDF of minimum SSIM scores in a run for VerizonEVDO1080p</text>
 	</g>
 </g>
 	<g id="gnuplot_plot_1" ><title>gnuplot_plot_1</title>
