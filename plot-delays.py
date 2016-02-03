@@ -77,13 +77,14 @@ def main():
     subtotal_playback_time = total_playback_time
     for ifd in xvals:
         subtotal_playback_time -= ifd
-        yvals.append( subtotal_playback_time / total_playback_time)
+        yvals.append(subtotal_playback_time / total_playback_time)
 
+    (xvals, yvals) = plotting_helper.downsample_cumulative_y((xvals, yvals))
     filename = dataset_title + "-proportional-playback.dat"
     plotting_helper.write_points_to_file(xvals, yvals, dataset_title, filename)
 
-    (xvals, yvals) = plotting_helper.get_cdf( inter_frame_delays_list )
-    yvals = 1-yvals # CCDF
+    (xvals, yvals) = plotting_helper.downsample_cumulative_y(plotting_helper.get_cdf(inter_frame_delays_list))
+    yvals = 1-np.array(yvals) # CCDF
     filename = dataset_title + "-inter-frame-delays-ccdf.dat"
     plotting_helper.write_points_to_file(xvals, yvals, dataset_title, filename)
 
