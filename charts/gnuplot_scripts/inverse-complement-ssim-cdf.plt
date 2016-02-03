@@ -4,5 +4,6 @@ unset key
 set title "CDF of 1 / ( 1 - SSIM ) values"# + dataset
 
 set xlabel '1/(1 - SSIM score)'
+set xrange [0:100]
 
 plot dataset.'/datapoints/'.dataset.'-inverse-complement-ssim-cdf.dat' using 1:2 title column
