@@ -6,4 +6,4 @@ set title "CDF of frame SSIM scores for ".dataset
 set xlabel 'SSIM score'
 
 set style data linespoints
-plot dataset.'/datapoints/'.dataset.'-ssim-cdf.dat' using 1:2 title column
+plot dataset.'/datapoints/'.dataset.'-ssim-cdf.dat' using 1:2 with steps title column

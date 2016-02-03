@@ -7,4 +7,4 @@ set xlabel 'CCDF of all inter-frame delays'
 set logscale y
 
 set style data linespoints
-plot dataset.'/datapoints/'.dataset.'-inter-frame-delays-ccdf.dat' using 1:2 title column
+plot dataset.'/datapoints/'.dataset.'-inter-frame-delays-ccdf.dat' using 1:2 with fsteps title column

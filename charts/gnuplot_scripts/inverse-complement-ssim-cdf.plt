@@ -7,4 +7,4 @@ set xlabel '1/(1 - SSIM score)'
 set xrange [0:100]
 
 set style data linespoints
-plot dataset.'/datapoints/'.dataset.'-inverse-complement-ssim-cdf.dat' using 1:2 title column
+plot dataset.'/datapoints/'.dataset.'-inverse-complement-ssim-cdf.dat' using 1:2 with steps title column

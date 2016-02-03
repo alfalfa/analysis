@@ -4,4 +4,4 @@ unset key
 set title "CDF of minimum SSIM scores in a run for ".dataset
 
 set style data linespoints
-plot dataset.'/datapoints/'.dataset.'-min-ssim-cdf.dat' using 1:2 title column
+plot dataset.'/datapoints/'.dataset.'-min-ssim-cdf.dat' using 1:2 with steps title column

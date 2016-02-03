@@ -6,4 +6,4 @@ set title "CDF rebuffering ratios for ".dataset
 set xlabel 'Rebuffering ratio'
 
 set style data linespoints
-plot dataset.'/datapoints/'.dataset.'-rebuffering-ratios-cdf.dat' using 1:2 title column
+plot dataset.'/datapoints/'.dataset.'-rebuffering-ratios-cdf.dat' using 1:2 with steps title column

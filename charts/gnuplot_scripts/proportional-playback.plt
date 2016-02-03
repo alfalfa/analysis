@@ -7,4 +7,4 @@ set xlabel 'Inter-frame delay (seconds)'
 set logscale y
 
 set style data linespoints
-plot dataset.'/datapoints/'.dataset.'-proportional-playback.dat' using 1:2 title column
+plot dataset.'/datapoints/'.dataset.'-proportional-playback.dat' using 1:2 with fsteps title column
