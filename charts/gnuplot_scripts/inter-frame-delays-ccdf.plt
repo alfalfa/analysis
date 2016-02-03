@@ -3,5 +3,6 @@ set output dataset."/".dataset."-inter-frame-delays-ccdf.svg"
 set title "CCDF of all inter-frame delays"# + dataset
 
 set xlabel 'CCDF of all inter-frame delays'
+set logscale y
 
-plot dataset.'/datapoints/'.dataset.'-inter-frame-delays-ccdf.dat' using 1 title column
+plot dataset.'/datapoints/'.dataset.'-inter-frame-delays-ccdf.dat' using 1:2 title column

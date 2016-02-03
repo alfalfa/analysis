@@ -4,4 +4,4 @@ set title "Proportion of total playback time with inter-frame delays less than"#
 
 set xlabel 'Inter-frame delay (seconds)'
 
-plot dataset.'/datapoints/'.dataset.'-proportional-playback.dat' using 1 title column
+plot dataset.'/datapoints/'.dataset.'-proportional-playback.dat' using 1:2 title column

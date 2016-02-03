@@ -4,4 +4,4 @@ set title "CDF of frame SSIM scores"# + dataset
 
 set xlabel 'SSIM score'
 
-plot dataset.'/datapoints/'.dataset.'-ssim-cdf.dat' using 1 title column
+plot dataset.'/datapoints/'.dataset.'-ssim-cdf.dat' using 1:2 title column
