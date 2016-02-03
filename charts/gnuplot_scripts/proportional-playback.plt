@@ -6,4 +6,5 @@ set title "Proportion playback time with less than x inter-frame delay for ".dat
 set xlabel 'Inter-frame delay (seconds)'
 set logscale y
 
-plot dataset.'/datapoints/'.dataset.'-proportional-playback.dat' using 1:2 with linespoints title column
+set style data linespoints
+plot dataset.'/datapoints/'.dataset.'-proportional-playback.dat' using 1:2 title column

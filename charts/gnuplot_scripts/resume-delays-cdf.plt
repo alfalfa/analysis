@@ -5,4 +5,5 @@ set title "CDF of seek delays for ".dataset
 
 set xlabel 'Resume duration (seconds)'
 
-plot dataset.'/datapoints/'.dataset.'-resume-delays-cdf.dat' using 1:2 with linespoints title column
+set style data linespoints
+plot dataset.'/datapoints/'.dataset.'-resume-delays-cdf.dat' using 1:2 title column

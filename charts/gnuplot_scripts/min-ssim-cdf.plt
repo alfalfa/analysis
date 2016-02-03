@@ -3,4 +3,5 @@ set output dataset."/".dataset."-min-ssim-cdf.svg"
 unset key
 set title "CDF of minimum SSIM scores in a run for ".dataset
 
-plot dataset.'/datapoints/'.dataset.'-min-ssim-cdf.dat' using 1:2 with linespoints title column
+set style data linespoints
+plot dataset.'/datapoints/'.dataset.'-min-ssim-cdf.dat' using 1:2 title column
